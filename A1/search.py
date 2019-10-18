@@ -42,7 +42,6 @@ Pacman agents (in searchAgents.py).
 
 import util
 
-
     #******** CH3 - Search, Page 16 ********
 def GeneralTreeSearh(dataStructure, problem, heuristic):
     fringe = dataStructure
@@ -52,24 +51,26 @@ def GeneralTreeSearh(dataStructure, problem, heuristic):
     else:
         fringe.push((problem.getStartState(), [], 0), 0)
 
-
     while not fringe.isEmpty():
         if heuristic is None:
             nodeState, nodePath  = fringe.pop()
         else:
             nodeState, nodePath, nodeCost  = fringe.pop()
 
-        visitedLocations.append(nodeState)
         if problem.isGoalState(nodeState):
             return nodePath
 
-        for  state, path, cost in problem.getSuccessors(nodeState):
-            if state not in visitedLocations:
-                if heuristic is None:
-                    fringe.push((state, nodePath + [path]))
-                else:
-                    totalCost = nodeCost + cost + heuristic(state,problem)
-                    fringe.push((state, nodePath + [path], (nodeCost+cost)),totalCost)
+        if nodeState not in visitedLocations:
+            visitedLocations.append(nodeState)
+
+            for state, path, cost in problem.getSuccessors(nodeState):
+                if state not in visitedLocations:
+                    
+                    if heuristic is None:
+                        fringe.push((state, nodePath + [path]))
+                    else:
+                        totalCost = nodeCost + cost + heuristic(state,problem)
+                        fringe.push((state, nodePath + [path], (nodeCost+cost)),totalCost)
     return
 
 
